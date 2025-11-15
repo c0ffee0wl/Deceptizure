@@ -1,3 +1,9 @@
+# Import AzureAD module (Linux compatibility)
+$linuxModulePath = "$HOME/.local/share/powershell/Modules/AzureAD.Standard.Preview/0.0.0.10/AzureAD.Standard.Preview.psm1"
+if (Test-Path $linuxModulePath) {
+    Import-Module -Name $linuxModulePath
+}
+
 Connect-AzureAD
 $headerss = @("UserPrincipalName","DisplayName","UserName","Password")  
 $csv = Import-Csv "CreateUsers.csv" -Header $headerss | Select-Object -skip 1

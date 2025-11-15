@@ -29,6 +29,64 @@ The following are required for Deceptizure to work:
   ```
 - If you're using a Trail account or a new Azure account, you maybe encountering few issues. Register all providers using the guide here: https://github.com/mattlunzer/registerAzureResourceProviders
 
+### Linux/Kali-Specific Setup
+
+If you're running Deceptizure on Kali Linux or other Linux distributions, follow these additional steps:
+
+1. **Install PowerShell Core (pwsh)**:
+   ```bash
+   # Download and install PowerShell for Linux
+   sudo apt update && sudo apt install -y wget apt-transport-https software-properties-common
+   wget -q https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb
+   sudo dpkg -i packages-microsoft-prod.deb
+   sudo apt update
+   sudo apt install -y powershell
+   ```
+
+2. **Create PowerShell symlink** (required for the Python scripts):
+   ```bash
+   # Create .local/bin directory if it doesn't exist
+   mkdir -p ~/.local/bin
+
+   # Create symlink from powershell to pwsh
+   ln -s $(which pwsh) ~/.local/bin/powershell
+
+   # Ensure ~/.local/bin is in your PATH
+   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+3. **Install Azure CLI** (if not already installed):
+   ```bash
+   sudo apt install -y azure-cli
+   ```
+
+4. **Install Python requirements**:
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+5. **Install PowerShell modules**:
+   ```bash
+   # Install AzureAD.Standard.Preview (required for Linux)
+   pwsh -c "Install-Module -Name AzureAD.Standard.Preview -RequiredVersion 0.0.0.10 -Force"
+
+   # Install Az module
+   pwsh -c "Install-Module Az -Force -AllowClobber"
+   ```
+
+6. **Configure Azure authentication**:
+   ```bash
+   az login
+
+   # Import and connect to AzureAD
+   pwsh -c "Import-Module -Name ~/.local/share/powershell/Modules/AzureAD.Standard.Preview/0.0.0.10/AzureAD.Standard.Preview.psm1; Connect-AzureAD"
+   ```
+
+**Notes**:
+- All PowerShell scripts (`.ps1` files) should be executed using `pwsh` on Linux, but the Python scripts will automatically use the `powershell` command (which now points to `pwsh` via the symlink).
+- The `add_users.ps1` script has been updated to automatically detect and import the Linux-compatible AzureAD module when running on Linux systems.
+
 ## What types of resources are created.
 The solution currently supports the following:
 - Deceptive Users: Users with real names, weak passwords (the user can specify the weak password list that they want to use). Users can also define format of the user name.

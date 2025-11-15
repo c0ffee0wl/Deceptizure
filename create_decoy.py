@@ -154,7 +154,7 @@ def createMSI(spnPattern,count):
             i = i + 1
     return pd.DataFrame(msi)
 
-random_words_list = requests.get("https://github.com/xyfir/rword/raw/refs/heads/main/packages/rword-english-extended/big.json").json()
+random_words_list = requests.get("https://raw.githubusercontent.com/xyfir/rword/refs/heads/main/packages/rword-english-extended/big.json").json()
 random_words_list = [x for x in random_words_list if len(x) > 5 and len(x) < 8]
 def createResource(resourceNamePattern,count):
     resources = []

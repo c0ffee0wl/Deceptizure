@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--subscriptionId", help = "Enter Subscription ID")
 parser.add_argument("--industry", default="IT", help = "Enter your Industry; Currently supported values: Healthcare, IT, Energy, Chemical, Construction.")
 parser.add_argument("--domain", help="Enter the domain name that's associated with your tenant")
-parser.add_argument("--passFile", default="https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt", help="Enter filepath or URL of the password file that you wish to use")
+parser.add_argument("--passFile", default="https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/Pwdb_top-1000000.txt", help="Enter filepath or URL of the password file that you wish to use")
 parser.add_argument("--outputFolder",default="Output", help="Enter a location where all the output can be stored")
 parser.add_argument("--mode", default="balanced", help="Enter the mode you want to choose; Currently supported: simple, balanced, godmode")
 parser.add_argument("--userPattern",default="{first_name}.{lname}@{domain}",help="Pattern to guide the creation of users. Check github.com/pbssubhash/Cloud-Deception for more details")
@@ -127,7 +127,7 @@ if "http" in passFile:
         passList = passList.split("\n")
 else:
         passList = open(passFile).readlines()
-passList = [x for x in passList if checkPassword(x)]
+passList = [x.strip() for x in passList if x.strip() and checkPassword(x.strip())]
 def createUsers(userPattern,count):
     fake = Faker()
     users = []

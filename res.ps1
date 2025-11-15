@@ -7,14 +7,14 @@ param (
     [Parameter(Position=0,mandatory=$true)]
     [string] $OutputFolder
 )
-$resources = Get-Content "$OutputFolder\resources.json"
-$msi = Get-Content "$OutputFolder\msi.json"
-$msi_attach = Get-Content "$OutputFolder\attach_msi.json"
-$users = Get-Content "$OutputFolder\user.json"
-$user_perm = Get-Content "$OutputFolder\user_perm.json"
-$msi_perm = Get-Content "$OutputFolder\msi_perm.json"
-$kv_perm = Get-Content "$OutputFolder\kv_perms.json"
-$storage_perm = Get-Content "$OutputFolder\storage_perms.json"
+$resources = Get-Content (Join-Path $OutputFolder "resources.json")
+$msi = Get-Content (Join-Path $OutputFolder "msi.json")
+$msi_attach = Get-Content (Join-Path $OutputFolder "attach_msi.json")
+$users = Get-Content (Join-Path $OutputFolder "user.json")
+$user_perm = Get-Content (Join-Path $OutputFolder "user_perm.json")
+$msi_perm = Get-Content (Join-Path $OutputFolder "msi_perm.json")
+$kv_perm = Get-Content (Join-Path $OutputFolder "kv_perms.json")
+$storage_perm = Get-Content (Join-Path $OutputFolder "storage_perms.json")
 if ($Mode -eq "Deploy") {
     foreach($user in $users){
         $user = ConvertFrom-Json $user
@@ -33,7 +33,7 @@ if ($Mode -eq "Deploy") {
     foreach($resource in $resources){
         $resource = ConvertFrom-Json $resource
         if ($resource.service -eq "Azure_Logic_App") {
-            $out =  New-AzLogicApp -ResourceGroupName $resource.res_group -Name $resource.name -Location $resource.location -State "Disabled" -DefinitionFilePath ./workflow_def.json
+            $out =  New-AzLogicApp -ResourceGroupName $resource.res_group -Name $resource.name -Location $resource.location -State "Disabled" -DefinitionFilePath (Join-Path $PSScriptRoot "workflow_def.json")
             Write-Output $out
         }
         elseif ($resource.service -eq "Azure_Automation") {

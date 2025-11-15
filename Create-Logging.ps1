@@ -24,7 +24,7 @@ try {
 $out = New-AzOperationalInsightsWorkspace -Location $LALocation -Name $WorkspaceName -ResourceGroupName $LAResourceGroup -Force
 $workspace_id = $out.ResourceId
 if ($Mode -eq "Start"){
-    foreach ($line in Get-Content "$OutputFolder\resources.json"){
+    foreach ($line in Get-Content (Join-Path $OutputFolder "resources.json")){
         $line = ConvertFrom-Json $line
         $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
         $headers.Add("x-ms-command-name", "Microsoft_Azure_Monitoring.")
